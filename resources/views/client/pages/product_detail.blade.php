@@ -1,41 +1,27 @@
 @extends('client.layout.master')
 
 @section('content')
-    <!-- single product -->
-    <div class="single-product mt-150 mb-150">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="single-product-img">
-                        <a href="single-product.html"><img src="{{ asset($item['image']) }}" alt="{{ $item['name'] }}"
-                                width="100" height="100"></a>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="single-product-content">
-                        <h3>{{ $product->name }}</h3>
-                        <p class="product-price">${{ $product->price }}</p>
-                        <p>{{ $product->short_description }}</p>
-                        <div class="single-product-form">
-                            <form action="index.html">
-                                <input type="number" id="product-qty" placeholder="0" min="1">
-                            </form>
-                            <li data-product-id="{{ $product->id }}" class="button-add-to-cart"><a href="cart.html"
-                                    class="cart-btn"><i class="fas fa-shopping-cart"></i> Add to Cart</a></li>
-                        </div>
-                        <ul class="product-share">
-                            <li><a href=""><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href=""><i class="fab fa-twitter"></i></a></li>
-                            <li><a href=""><i class="fab fa-google-plus-g"></i></a></li>
-                            <li><a href=""><i class="fab fa-linkedin"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
+<div class="product-detail mt-150 mb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" class="img-fluid">
+            </div>
+            <div class="col-md-7">
+                <h3>{{ $product->name }}</h3>
+                <p class="product-price">${{ $product->price }}</p>
+                <p>{{ $product->short_description }}</p>
+                <form action="{{ route('client.cart.add-product', ['productId' => $product->id]) }}" method="POST">
+                    @csrf
+                    <input type="number" name="qty" value="1" min="1" required>
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
             </div>
         </div>
     </div>
-    <!-- end single product -->
+</div>
 @endsection
+
 
 @section('my-js')
     <script>

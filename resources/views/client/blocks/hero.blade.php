@@ -5,8 +5,8 @@
             <div class="col-lg-9 offset-lg-2 text-center">
                 <div class="hero-text">
                     <div class="hero-text-tablecell">
-                        <p class="subtitle">Fresh & Organic</p>
-                        <h1>Delicious Seasonal Fruits</h1>
+                        <p class="subtitle">Restaurant</p>
+                        <h1>Delicious Food</h1>
                     </div>
                 </div>
             </div>

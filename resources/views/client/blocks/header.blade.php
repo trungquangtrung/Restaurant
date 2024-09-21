@@ -15,17 +15,16 @@
                     <!-- menu start -->
                     <nav class="main-menu">
                         <ul>
-                            <li class="current-list-item"><a href="#">Home</a>
+                            <li class="current-list-item"><a href="{{route('client.home')}}">Home</a>
                             </li>
                             <li><a href="#">Pages</a>
                                 <ul class="sub-menu">
-                                    <li><a href="cart.html">Cart</a></li>
-                                    <li><a href="checkout.html">Check Out</a></li>
+                                    <li><a href="{{route('client.cart')}}">Cart</a></li>
+                                    <li><a href="{{route('client.checkout')}}">Check Out</a></li>
                                     <li><a href="shop.html">Menu</a></li>
                                 </ul>
                             </li>
-                            <li><a href="contact.html">Contact</a></li>
-                            <li><a href="shop.html">Menu</a>
+                            <li><a href="{{view('client.pages.contact')}}}">Contact</a></li>
                             </li>
                             <li>
                                 <div class="header-icons">
