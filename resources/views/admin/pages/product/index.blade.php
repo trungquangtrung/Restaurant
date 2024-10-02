@@ -67,7 +67,6 @@
                                         <tr>
                                             <th style="width: 10px">#</th>
                                             <th>Name</th>
-                                            <th>Product Category Name</th>
                                             <th>Price</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -78,7 +77,6 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $data->name }}</td>
-                                                <td>{{ $data->productCategory?->name }}</td>
                                                 <td>{{ $data->price }}</td>
                                                 <td>{{ $data->status ? 'Show' : 'Hide' }}</td>
                                                 <td>

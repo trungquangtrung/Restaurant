@@ -39,6 +39,9 @@ class CartController extends Controller
         return response()->json(['message' => 'Add product to cart success!']);
     }
 
+
+    
+
     public function index(){
         $cart = session()->get('cart', []);
 
@@ -54,7 +57,9 @@ class CartController extends Controller
 
         session()->put('cart', $cart);
 
+        return view('client.pages.cart', ['cart' => $cart]);
         return response()->json(['message' => 'Delete product on cart success!']);
+        
     }
 
     public function checkout(){
@@ -163,38 +168,55 @@ class CartController extends Controller
         return $vnp_Url;
     }
 
-    public function vnpayCallBack(Request $request){
+    public function vnpayCallBack(Request $request) {
         $arrayResponseVnpay = [
             '00' => 'Giao dịch thành công',
             '07' => 'Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).',
             '09' => 'Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.'
         ];
+    
         $orderId = $request->vnp_TxnRef;
         $order = Order::find($orderId);
+    
+        if (!$order) {
+            return redirect()->route('home')->with('error', 'Đơn hàng không tồn tại.');
+        }
+    
         $order->payment_method = 'vnpay';
-
-        if($request->vnp_ResponseCode === '00'){
+    
+        if ($request->vnp_ResponseCode === '00') {
             $order->status = 'success';
-        }else{
+        } else {
             $order->status = 'fail';
             $order->payment_method_reason = $arrayResponseVnpay[$request->vnp_ResponseCode] ?? 'Error';
         }
-
+    
         $order->save();
-
+    
         $cart = session()->get('cart', []);
-        //Send mail customer
-        Mail::to('trungquang00000@gmail.com')->send(new OrderEmailCustomer($order));
-        //Send mail admin
-        Mail::to('trungquang00000@gmail.com')->send(new OrderEmailAdmin($order));
-        //Minus qty on product
-        foreach($cart as $productId => $item){
-            $product = Product::find($productId);
-            $product->qty -= $item['qty'];
-            $product->save(); //update record
+        
+        // Gửi email cho khách hàng
+        try {
+            Mail::to($order->customer_email)->send(new OrderEmailCustomer($order));
+            Mail::to('trungquang00000@gmail.com')->send(new OrderEmailAdmin($order));
+        } catch (\Exception $e) {
+            // Xử lý lỗi gửi email nếu cần
         }
-        session()->put('cart', []);
-
-        return redirect()->route('home')->with('message', '');
+    
+        // Cập nhật số lượng sản phẩm
+        foreach ($cart as $productId => $item) {
+            $product = Product::find($productId);
+            if ($product && $product->qty >= $item['qty']) {
+                $product->qty -= $item['qty'];
+                $product->save();
+            } else {
+                // Xử lý trường hợp không đủ hàng
+            }
+        }
+    
+        session()->put('cart', []); // Xóa giỏ hàng trong session
+    
+        return redirect()->route('home')->with('message', 'Thanh toán ' . ($order->status === 'success' ? 'thành công' : 'thất bại'));
     }
+    
 }

@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('order_id')->references('id')->on('order');
             $table->foreign('product_id')->references('id')->on('product');
+            
         });
     }
 

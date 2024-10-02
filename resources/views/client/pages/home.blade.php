@@ -83,7 +83,7 @@
                     <div class="col-lg-4 col-md-6 text-center">
                         <div class="single-product-item">
                             <div class="product-image">
-                                <a href="single-product.html">
+                                <a href="{{ route('product.detail', ['slug' => $item->slug]) }}">
                                     <img src="{{ asset('images/' . $item->image) }}" width="150" height="200"
                                         alt="{{ $item->name }}">
                                 </a>
