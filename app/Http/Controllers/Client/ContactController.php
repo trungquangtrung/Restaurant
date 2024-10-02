@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Mail; // Sử dụng để gửi email (nếu cần)
-use App\Models\Contact; // Nếu lưu vào cơ sở dữ liệu
+use App\Models\Contact; 
 use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
@@ -16,10 +15,10 @@ class ContactController extends Controller
         return view('client.pages.contact');
     }
 
-    // Xử lý khi người dùng submit form
+    
     public function submitForm(Request $request)
     {
-        // Validation dữ liệu
+        
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email',
@@ -32,15 +31,14 @@ class ContactController extends Controller
                         ->withInput();
         }
 
-        // Lưu vào cơ sở dữ liệu hoặc gửi email (tùy nhu cầu)
+      
         Contact::create([
             'name' => $request->name,
             'email' => $request->email,
             'message' => $request->message,
         ]);
 
-        // Gửi email (nếu cần)
-        // Mail::to('admin@example.com')->send(new ContactMail($request->all()));
+      
 
         return redirect()->route('client.contact.form')->with('success', 'Message sent successfully!');
     }

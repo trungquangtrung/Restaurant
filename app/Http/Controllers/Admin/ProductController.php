@@ -30,26 +30,7 @@ class ProductController extends Controller
 
         $itemPerPage = config('myconfig.my-app.my-config.my-pagination.item-per-page');
 
-        //Query Builder
-        // SELECT p.*, pc.name as 'product_category_name'
-        // FROM `product` p
-        // LEFT JOIN `product_category` pc ON p.product_category_id = pc.id;
-        // if(is_null($keyword)){
-        //     $datas = DB::table('product')
-        //             ->leftJoin('product_category', 'product.product_category_id', '=', 'product_category.id')
-        //             ->orderBy($sortBy[0], $sortBy[1])
-        //             ->select('product.*', DB::raw('product_category.name as product_category_name'))
-        //             ->paginate($itemPerPage);
-        // }else{
-        //     $datas = DB::table('product')
-        //         ->leftJoin('product_category', 'product.product_category_id', '=', 'product_category.id')
-        //         ->orderBy($sortBy[0], $sortBy[1])
-        //         ->select('product.*', DB::raw('product_category.name as product_category_name'))
-        //         ->where('name', 'like' , "%$keyword%")
-        //         ->paginate($itemPerPage);
-        // }
-
-        //Eloquent
+        
         if(is_null($keyword)){
             $datas = Product::with('productCategory')->orderBy($sortBy[0], $sortBy[1])->paginate($itemPerPage);
         }else{

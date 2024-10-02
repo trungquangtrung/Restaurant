@@ -131,17 +131,17 @@
         })
         .then(response => response.json())
         .then(data => {
-            couponMessage.textContent = data.message; // Hiển thị thông báo
+            couponMessage.textContent = data.message; 
 
             if (data.newTotal) {
                 // Cập nhật tổng giá trị trên giao diện
-                const totalElement = document.querySelector('.total-data td:last-child'); // Lấy phần tử tổng
-                totalElement.textContent = '$' + data.newTotal; // Cập nhật giá trị tổng
+                const totalElement = document.querySelector('.total-data td:last-child'); 
+                totalElement.textContent = '$' + data.newTotal; 
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            couponMessage.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.'; // Thông báo lỗi
+            couponMessage.textContent = 'Đã có lỗi xảy ra. Vui lòng thử lại.'; 
         });
     });
 

@@ -93,19 +93,19 @@ class CartController extends Controller
                 $orderItem->name = $item['name'];
                 $orderItem->product_id = $productId;
                 $orderItem->order_id = $order->id;
-                $orderItem->save(); // Insert new record
+                $orderItem->save(); 
             }
 
             $user = Auth::user();
             $user->phone = $request->phone;
-            $user->save(); //update record
+            $user->save(); 
 
             if(in_array($request->bank_code, ['VNBANK', 'INTCARD']) ){
                 DB::commit();
                 $vnPayUrl = $this->processWithVNPay($order, $request->bank_code);
                 return Redirect::to($vnPayUrl);
             }else{
-                //public | emit event
+                
                 event(new OrderSuccessEvent($order));
                 $order->payment_method = 'cod';
                 $order->save();
@@ -195,26 +195,26 @@ class CartController extends Controller
     
         $cart = session()->get('cart', []);
         
-        // Gửi email cho khách hàng
+       
         try {
             Mail::to($order->customer_email)->send(new OrderEmailCustomer($order));
             Mail::to('trungquang00000@gmail.com')->send(new OrderEmailAdmin($order));
         } catch (\Exception $e) {
-            // Xử lý lỗi gửi email nếu cần
+            
         }
     
-        // Cập nhật số lượng sản phẩm
+        
         foreach ($cart as $productId => $item) {
             $product = Product::find($productId);
             if ($product && $product->qty >= $item['qty']) {
                 $product->qty -= $item['qty'];
                 $product->save();
             } else {
-                // Xử lý trường hợp không đủ hàng
+           
             }
         }
     
-        session()->put('cart', []); // Xóa giỏ hàng trong session
+        session()->put('cart', []); 
     
         return redirect()->route('home')->with('message', 'Thanh toán ' . ($order->status === 'success' ? 'thành công' : 'thất bại'));
     }
